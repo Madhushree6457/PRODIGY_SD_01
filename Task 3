@@ -1,0 +1,133 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Define the structure for a contact
+struct Contact {
+    char name[50];
+    char phone[15];
+    char email[50];
+};
+
+// Function to add a new contact
+void addContact(struct Contact* contacts, int* contactCount) {
+    printf("\nEnter Contact Information:\n");
+
+    printf("Name: ");
+    scanf("%s", contacts[*contactCount].name);
+
+    printf("Phone: ");
+    scanf("%s", contacts[*contactCount].phone);
+
+    printf("Email: ");
+    scanf("%s", contacts[*contactCount].email);
+
+    (*contactCount)++;
+    printf("Contact added successfully!\n");
+}
+
+// Function to view all contacts
+void viewContacts(struct Contact* contacts, int contactCount) {
+    if (contactCount == 0) {
+        printf("No contacts available.\n");
+        return;
+    }
+
+    printf("\nContact List:\n");
+    for (int i = 0; i < contactCount; i++) {
+        printf("%d. Name: %s, Phone: %s, Email: %s\n", i + 1, contacts[i].name, contacts[i].phone, contacts[i].email);
+    }
+}
+
+// Function to edit a contact
+void editContact(struct Contact* contacts, int contactCount) {
+    if (contactCount == 0) {
+        printf("No contacts available to edit.\n");
+        return;
+    }
+
+    int index;
+    printf("Enter the index of the contact to edit (1 to %d): ", contactCount);
+    scanf("%d", &index);
+
+    if (index >= 1 && index <= contactCount) {
+        printf("\nEnter updated information for the contact:\n");
+
+        printf("Name: ");
+        scanf("%s", contacts[index - 1].name);
+
+        printf("Phone: ");
+        scanf("%s", contacts[index - 1].phone);
+
+        printf("Email: ");
+        scanf("%s", contacts[index - 1].email);
+
+        printf("Contact updated successfully!\n");
+    } else {
+        printf("Invalid index.\n");
+    }
+}
+
+// Function to delete a contact
+void deleteContact(struct Contact* contacts, int* contactCount) {
+    if (*contactCount == 0) {
+        printf("No contacts available to delete.\n");
+        return;
+    }
+
+    int index;
+    printf("Enter the index of the contact to delete (1 to %d): ", *contactCount);
+    scanf("%d", &index);
+
+    if (index >= 1 && index <= *contactCount) {
+        for (int i = index - 1; i < *contactCount - 1; i++) {
+            strcpy(contacts[i].name, contacts[i + 1].name);
+            strcpy(contacts[i].phone, contacts[i + 1].phone);
+            strcpy(contacts[i].email, contacts[i + 1].email);
+        }
+
+        (*contactCount)--;
+        printf("Contact deleted successfully!\n");
+    } else {
+        printf("Invalid index.\n");
+    }
+}
+
+int main() {
+    struct Contact contacts[100]; // Assuming a maximum of 100 contacts
+    int contactCount = 0;
+    int choice;
+
+    do {
+        printf("\nContact Management System\n");
+        printf("1. Add Contact\n");
+        printf("2. View Contacts\n");
+        printf("3. Edit Contact\n");
+        printf("4. Delete Contact\n");
+        printf("5. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                addContact(contacts, &contactCount);
+                break;
+            case 2:
+                viewContacts(contacts, contactCount);
+                break;
+            case 3:
+                editContact(contacts, contactCount);
+                break;
+            case 4:
+                deleteContact(contacts, &contactCount);
+                break;
+            case 5:
+                printf("Exiting the program. Goodbye!\n");
+                break;
+            default:
+                printf("Invalid choice. Please enter a valid option.\n");
+        }
+    } while (choice != 5);
+
+    return 0;
+}
